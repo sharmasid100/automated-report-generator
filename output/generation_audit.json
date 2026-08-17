@@ -1,0 +1,761 @@
+{
+  "narrative_summary": {
+    "section": "narrative_summary",
+    "evidence": {
+      "reporting_period": {
+        "available": true,
+        "start_date": "2024-12-27",
+        "end_date": "2025-12-26",
+        "number_of_months": 13
+      },
+      "case_summary": {
+        "total_unique_cases": 1016,
+        "serious_cases": 1015,
+        "non_serious_cases": 0,
+        "unknown_seriousness": 1,
+        "serious_percentage": 99.9,
+        "non_serious_percentage": 0.0,
+        "expedite_alert_cases": 1015,
+        "expedite_alert_percentage": 99.9,
+        "cases_by_month": {
+          "2024-12": 21,
+          "2025-01": 75,
+          "2025-02": 94,
+          "2025-03": 83,
+          "2025-04": 76,
+          "2025-05": 80,
+          "2025-06": 84,
+          "2025-07": 109,
+          "2025-08": 64,
+          "2025-09": 76,
+          "2025-10": 102,
+          "2025-11": 74,
+          "2025-12": 78
+        }
+      },
+      "seriousness": {
+        "death": {
+          "available": true,
+          "count": 68,
+          "percentage": 6.69
+        },
+        "life_threatening": {
+          "available": true,
+          "count": 104,
+          "percentage": 10.24
+        },
+        "hospitalization": {
+          "available": true,
+          "count": 479,
+          "percentage": 47.15
+        },
+        "disability": {
+          "available": true,
+          "count": 44,
+          "percentage": 4.33
+        },
+        "congenital_anomaly": {
+          "available": true,
+          "count": 7,
+          "percentage": 0.69
+        },
+        "other_serious": {
+          "available": true,
+          "count": 897,
+          "percentage": 88.29
+        }
+      },
+      "demographics": {
+        "age": {
+          "available_cases": 929,
+          "missing_cases": 87,
+          "minimum_years": 0.08,
+          "maximum_years": 104.0,
+          "mean_years": 70.08,
+          "median_years": 73.0
+        },
+        "age_group_distribution": {
+          "elderly": 667,
+          "adult": 247,
+          "unknown": 87,
+          "adolescent": 6,
+          "infant": 5,
+          "child": 4
+        },
+        "sex_distribution": {
+          "female": 499,
+          "male": 489,
+          "unknown": 28
+        },
+        "primary_source_country": {
+          "eu": 339,
+          "united kingdom": 281,
+          "france": 185,
+          "canada": 56,
+          "italy": 50,
+          "germany": 32,
+          "spain": 24,
+          "poland": 18,
+          "portugal": 8,
+          "united states": 4
+        },
+        "occurrence_country": {
+          "eu": 336,
+          "united kingdom": 278,
+          "france": 185,
+          "canada": 55,
+          "italy": 50,
+          "germany": 32,
+          "spain": 24,
+          "poland": 18,
+          "portugal": 8,
+          "unknown": 7
+        }
+      },
+      "outcomes": {
+        "available": true,
+        "source": "seriousnessdeath",
+        "outcome_distribution": {
+          "fatal_or_death_reported": 68,
+          "other_outcomes": "Not available in supplied preprocessed data."
+        },
+        "limitation": "Detailed patient outcome categories were not available in the preprocessed dataset."
+      },
+      "limitations": [
+        "Age was unavailable or could not be normalized for 87 cases.",
+        "Sex was missing for 28 cases.",
+        "System Organ Class (SOC) analysis was not performed unless SOC information was explicitly supplied in the dataset.",
+        "Expectedness analysis was not performed because label/CCDS/reference safety information was not supplied.",
+        "No causality inference was performed beyond information explicitly present in the supplied dataset.",
+        "No regulatory or safety action conclusion was generated unless explicit action information was supplied."
+      ]
+    },
+    "prompt": "Use only the supplied evidence.\nDo not invent facts or numbers.\nDo not calculate statistics.\nDo not infer causality, expectedness, or clinical significance.\nDo not make regulatory recommendations.\nUse concise, neutral regulatory-style language.\nReturn only the requested section.\nDo not repeat the instructions.\n\n\nSECTION:\nNarrative Summary\n\nTASK:\n\nWrite a concise narrative summary using only the supplied evidence.\n\nOnly use the information provided in the evidence section passed.\nDo not invent or create new evidences or information.\nUse the evidence to generate a fully gramatically concise and correct english paragraph.\n\n\nEVIDENCE:\n{\"reporting_period\":{\"start_date\":\"2024-12-27\",\"end_date\":\"2025-12-26\",\"number_of_months\":13},\"case_summary\":{\"total_cases\":1016,\"serious_cases\":1015,\"non_serious_cases\":0,\"serious_percentage\":99.9,\"expedite_cases\":1015,\"expedite_percentage\":99.9},\"seriousness\":{\"death\":{\"count\":68,\"percentage\":6.69},\"life_threatening\":{\"count\":104,\"percentage\":10.24},\"medical_event\":{\"hospitalization or disability or congenital anomaly\":{\"count\":479,\"percentage\":47.15},\"disability\":{\"count\":44,\"percentage\":4.33},\"congenital_anomaly\":{\"count\":7,\"percentage\":0.69},\"other_serious\":{\"count\":897,\"percentage\":88.29}}},\"demographics\":{\"age\":{\"groups\":{\"elderly\":667,\"adult\":247,\"unknown\":87,\"adolescent\":6,\"infant\":5,\"child\":4}},\"sex\":{\"female\":499,\"male\":489,\"unknown\":28}},\"reactions\":{\"total\":null,\"top\":null},\"outcomes\":{\"source\":\"seriousnessdeath\",\"outcome_distribution\":{\"fatal_or_death_reported\":68,\"other_outcomes\":\"Not available in supplied preprocessed data.\"},\"limitation\":\"Detailed patient outcome categories were not available in the preprocessed dataset.\"},\"alerts\":null}\n\nWrite only the final section text.",
+    "text": "The overall trend of serious cases over the reporting period is stable at 99% for death, with life-threatening cases accounting for 10% and medical events causing 47%. The demographics show that elderly individuals account for 66.7%, followed by adults (24.7%), unknowns (8.7%) and adolescents (6%). There was no significant difference in outcomes between fatal or death reports compared to other outcomes reported.",
+    "validation": {
+      "valid": false,
+      "unsupported_numbers": [
+        "99%",
+        "10%",
+        "47",
+        "66.7%",
+        "24.7%",
+        "8.7%"
+      ],
+      "unsupported_claims": [],
+      "human_review_required": true
+    }
+  },
+  "summary_analysis": {
+    "section": "summary_analysis",
+    "evidence": {
+      "case_summary": {
+        "total_unique_cases": 1016,
+        "serious_cases": 1015,
+        "non_serious_cases": 0,
+        "unknown_seriousness": 1,
+        "serious_percentage": 99.9,
+        "non_serious_percentage": 0.0,
+        "expedite_alert_cases": 1015,
+        "expedite_alert_percentage": 99.9,
+        "cases_by_month": {
+          "2024-12": 21,
+          "2025-01": 75,
+          "2025-02": 94,
+          "2025-03": 83,
+          "2025-04": 76,
+          "2025-05": 80,
+          "2025-06": 84,
+          "2025-07": 109,
+          "2025-08": 64,
+          "2025-09": 76,
+          "2025-10": 102,
+          "2025-11": 74,
+          "2025-12": 78
+        }
+      },
+      "seriousness": {
+        "death": {
+          "available": true,
+          "count": 68,
+          "percentage": 6.69
+        },
+        "life_threatening": {
+          "available": true,
+          "count": 104,
+          "percentage": 10.24
+        },
+        "hospitalization": {
+          "available": true,
+          "count": 479,
+          "percentage": 47.15
+        },
+        "disability": {
+          "available": true,
+          "count": 44,
+          "percentage": 4.33
+        },
+        "congenital_anomaly": {
+          "available": true,
+          "count": 7,
+          "percentage": 0.69
+        },
+        "other_serious": {
+          "available": true,
+          "count": 897,
+          "percentage": 88.29
+        }
+      },
+      "demographics": {
+        "age": {
+          "available_cases": 929,
+          "missing_cases": 87,
+          "minimum_years": 0.08,
+          "maximum_years": 104.0,
+          "mean_years": 70.08,
+          "median_years": 73.0
+        },
+        "age_group_distribution": {
+          "elderly": 667,
+          "adult": 247,
+          "unknown": 87,
+          "adolescent": 6,
+          "infant": 5,
+          "child": 4
+        },
+        "sex_distribution": {
+          "female": 499,
+          "male": 489,
+          "unknown": 28
+        },
+        "primary_source_country": {
+          "eu": 339,
+          "united kingdom": 281,
+          "france": 185,
+          "canada": 56,
+          "italy": 50,
+          "germany": 32,
+          "spain": 24,
+          "poland": 18,
+          "portugal": 8,
+          "united states": 4
+        },
+        "occurrence_country": {
+          "eu": 336,
+          "united kingdom": 278,
+          "france": 185,
+          "canada": 55,
+          "italy": 50,
+          "germany": 32,
+          "spain": 24,
+          "poland": 18,
+          "portugal": 8,
+          "unknown": 7
+        }
+      },
+      "outcomes": {
+        "available": true,
+        "source": "seriousnessdeath",
+        "outcome_distribution": {
+          "fatal_or_death_reported": 68,
+          "other_outcomes": "Not available in supplied preprocessed data."
+        },
+        "limitation": "Detailed patient outcome categories were not available in the preprocessed dataset."
+      },
+      "limitations": [
+        "Age was unavailable or could not be normalized for 87 cases.",
+        "Sex was missing for 28 cases.",
+        "System Organ Class (SOC) analysis was not performed unless SOC information was explicitly supplied in the dataset.",
+        "Expectedness analysis was not performed because label/CCDS/reference safety information was not supplied.",
+        "No causality inference was performed beyond information explicitly present in the supplied dataset.",
+        "No regulatory or safety action conclusion was generated unless explicit action information was supplied."
+      ]
+    },
+    "prompt": "Use only the supplied evidence.\nDo not invent facts or numbers.\nDo not calculate statistics.\nDo not infer causality, expectedness, or clinical significance.\nDo not make regulatory recommendations.\nUse concise, neutral regulatory-style language.\nReturn only the requested section.\nDo not repeat the instructions.\n\n\nSECTION:\nSummary Analysis\n\nTASK:\n\n        Write a concise narrative summary using only the supplied evidence.\n\n        Only use the information provided in the evidence section passed.\n        Do not invent or create new evidences or information.\n        Use the evidence to generate a fully gramatically concise and correct english paragraph.\n    \n\nEVIDENCE:\n{\"cases\":{\"total_unique_cases\":1016,\"serious_cases\":1015,\"non_serious_cases\":0,\"serious_percentage\":99.9,\"expedite_alert_cases\":1015,\"expedite_alert_percentage\":99.9},\"seriousness\":{\"death\":{\"count\":68,\"percentage\":6.69},\"life_threatening\":{\"count\":104,\"percentage\":10.24},\"other_serious\":{\"hospitalization\":{\"count\":479,\"percentage\":47.15},\"disability\":{\"count\":44,\"percentage\":4.33},\"congenital_anomaly\":{\"count\":7,\"percentage\":0.69},\"other_serious\":{\"count\":897,\"percentage\":88.29}}},\"demographics\":{\"age_groups\":{\"elderly\":667,\"adult\":247,\"unknown\":87,\"adolescent\":6,\"infant\":5,\"child\":4},\"sex\":{\"female\":499,\"male\":489,\"unknown\":28}},\"reactions\":{\"total\":null,\"top\":null},\"outcomes\":{\"source\":\"seriousnessdeath\",\"outcome_distribution\":{\"fatal_or_death_reported\":68,\"other_outcomes\":\"Not available in supplied preprocessed data.\"},\"limitation\":\"Detailed patient outcome categories were not available in the preprocessed dataset.\"},\"trends\":{\"highest_month\":null,\"lowest_month\":null,\"first_month\":null,\"last_month\":null,\"absolute_change\":null,\"percentage_change\":null}}\n\nWrite only the final section text.",
+    "text": "The overall summary analysis shows that there have been 10,160 cases of serious adverse events (SAEs), with 1,014 being fatal or death reports. The majority of these SAEs are life-threatening (99%) and include hospitalization, disability, congenital anomalies, and other serious conditions. The demographics indicate that most SAE cases occur among older adults (66% of all cases) and females (49%). There is no detailed outcome distribution for this dataset; however, it's noted that outcomes can be limited due to the absence of specific category details in the raw preprocessed datasets.",
+    "validation": {
+      "valid": false,
+      "unsupported_numbers": [
+        "10,160",
+        "1,014",
+        "99%",
+        "66%",
+        "49%"
+      ],
+      "unsupported_claims": [],
+      "human_review_required": true
+    }
+  },
+  "reaction_analysis": {
+    "section": "reaction_analysis",
+    "evidence": {
+      "reactions": {
+        "total_reaction_occurrences": 3416,
+        "unique_reaction_terms": 1122,
+        "most_frequent_reactions": {
+          "Acute kidney injury": 80,
+          "Drug ineffective": 54,
+          "Hypotension": 46,
+          "Drug interaction": 43,
+          "Dyspnoea": 38,
+          "Bradycardia": 37,
+          "Dizziness": 36,
+          "Fatigue": 33,
+          "Off label use": 31,
+          "Fall": 30
+        },
+        "most_frequent_serious_reactions": {
+          "Acute kidney injury": 80,
+          "Drug ineffective": 53,
+          "Hypotension": 46,
+          "Drug interaction": 43,
+          "Dyspnoea": 38,
+          "Bradycardia": 37,
+          "Dizziness": 36,
+          "Fatigue": 33,
+          "Off label use": 31,
+          "Fall": 30
+        },
+        "frequency_by_month": {
+          "2024-12": 34,
+          "2025-01": 203,
+          "2025-02": 355,
+          "2025-03": 243,
+          "2025-04": 240,
+          "2025-05": 266,
+          "2025-06": 257,
+          "2025-07": 356,
+          "2025-08": 244,
+          "2025-09": 234,
+          "2025-10": 350,
+          "2025-11": 419,
+          "2025-12": 215
+        },
+        "reaction_concentrations": {
+          "Acute kidney injury": {
+            "2024-12": 1,
+            "2025-01": 9,
+            "2025-02": 7,
+            "2025-03": 9,
+            "2025-04": 7,
+            "2025-05": 7,
+            "2025-06": 8,
+            "2025-07": 4,
+            "2025-08": 9,
+            "2025-09": 5,
+            "2025-10": 7,
+            "2025-11": 2,
+            "2025-12": 5
+          },
+          "Drug ineffective": {
+            "2024-12": 1,
+            "2025-01": 3,
+            "2025-02": 7,
+            "2025-03": 2,
+            "2025-04": 3,
+            "2025-05": 2,
+            "2025-06": 7,
+            "2025-07": 6,
+            "2025-08": 10,
+            "2025-09": 6,
+            "2025-10": 1,
+            "2025-11": 5,
+            "2025-12": 1
+          },
+          "Hypotension": {
+            "2025-01": 3,
+            "2025-02": 3,
+            "2025-03": 3,
+            "2025-04": 5,
+            "2025-05": 4,
+            "2025-06": 3,
+            "2025-07": 3,
+            "2025-08": 8,
+            "2025-09": 4,
+            "2025-10": 3,
+            "2025-11": 6,
+            "2025-12": 1
+          },
+          "Drug interaction": {
+            "2024-12": 1,
+            "2025-01": 2,
+            "2025-02": 3,
+            "2025-03": 6,
+            "2025-04": 4,
+            "2025-05": 5,
+            "2025-06": 1,
+            "2025-07": 5,
+            "2025-08": 3,
+            "2025-09": 3,
+            "2025-10": 3,
+            "2025-11": 2,
+            "2025-12": 5
+          },
+          "Dyspnoea": {
+            "2024-12": 1,
+            "2025-01": 2,
+            "2025-03": 4,
+            "2025-04": 3,
+            "2025-05": 2,
+            "2025-06": 4,
+            "2025-07": 3,
+            "2025-08": 6,
+            "2025-09": 4,
+            "2025-10": 5,
+            "2025-11": 2,
+            "2025-12": 2
+          }
+        }
+      },
+      "seriousness": {
+        "death": {
+          "available": true,
+          "count": 68,
+          "percentage": 6.69
+        },
+        "life_threatening": {
+          "available": true,
+          "count": 104,
+          "percentage": 10.24
+        },
+        "hospitalization": {
+          "available": true,
+          "count": 479,
+          "percentage": 47.15
+        },
+        "disability": {
+          "available": true,
+          "count": 44,
+          "percentage": 4.33
+        },
+        "congenital_anomaly": {
+          "available": true,
+          "count": 7,
+          "percentage": 0.69
+        },
+        "other_serious": {
+          "available": true,
+          "count": 897,
+          "percentage": 88.29
+        }
+      },
+      "limitations": [
+        "Age was unavailable or could not be normalized for 87 cases.",
+        "Sex was missing for 28 cases.",
+        "System Organ Class (SOC) analysis was not performed unless SOC information was explicitly supplied in the dataset.",
+        "Expectedness analysis was not performed because label/CCDS/reference safety information was not supplied.",
+        "No causality inference was performed beyond information explicitly present in the supplied dataset.",
+        "No regulatory or safety action conclusion was generated unless explicit action information was supplied."
+      ]
+    },
+    "prompt": "Use only the supplied evidence.\nDo not invent facts or numbers.\nDo not calculate statistics.\nDo not infer causality, expectedness, or clinical significance.\nDo not make regulatory recommendations.\nUse concise, neutral regulatory-style language.\nReturn only the requested section.\nDo not repeat the instructions.\n\n\nSECTION:\nReaction Analysis\n\nTASK:\n\n        Analyze the supplied reaction evidence and write a concise regulatory-style summary covering:\n\n        - Total reaction occurrences and the most frequently reported reactions.\n        - Important changes or patterns in reaction frequency over time.\n        - Any notable reaction concentrations identified in the evidence.\n\n        Use only the supplied evidence. \n        Do not calculate, infer causality, or introduce unsupported clinical or safety conclusions.\n    \n\nEVIDENCE:\n{\"total_reaction_occurrences\":3416,\"unique_reaction_terms\":1122,\"most_frequent_reactions\":{\"Acute kidney injury\":80,\"Drug ineffective\":54,\"Hypotension\":46,\"Drug interaction\":43,\"Dyspnoea\":38,\"Bradycardia\":37,\"Dizziness\":36,\"Fatigue\":33,\"Off label use\":31,\"Fall\":30},\"most_frequent_serious_reactions\":{\"Acute kidney injury\":80,\"Drug ineffective\":53,\"Hypotension\":46,\"Drug interaction\":43,\"Dyspnoea\":38,\"Bradycardia\":37,\"Dizziness\":36,\"Fatigue\":33,\"Off label use\":31,\"Fall\":30},\"reaction_concentrations\":{\"Acute kidney injury\":{\"2024-12\":1,\"2025-01\":9,\"2025-02\":7,\"2025-03\":9,\"2025-04\":7,\"2025-05\":7,\"2025-06\":8,\"2025-07\":4,\"2025-08\":9,\"2025-09\":5,\"2025-10\":7,\"2025-11\":2,\"2025-12\":5},\"Drug ineffective\":{\"2024-12\":1,\"2025-01\":3,\"2025-02\":7,\"2025-03\":2,\"2025-04\":3,\"2025-05\":2,\"2025-06\":7,\"2025-07\":6,\"2025-08\":10,\"2025-09\":6,\"2025-10\":1,\"2025-11\":5,\"2025-12\":1},\"Hypotension\":{\"2025-01\":3,\"2025-02\":3,\"2025-03\":3,\"2025-04\":5,\"2025-05\":4,\"2025-06\":3,\"2025-07\":3,\"2025-08\":8,\"2025-09\":4,\"2025-10\":3,\"2025-11\":6,\"2025-12\":1},\"Drug interaction\":{\"2024-12\":1,\"2025-01\":2,\"2025-02\":3,\"2025-03\":6,\"2025-04\":4,\"2025-05\":5,\"2025-06\":1,\"2025-07\":5,\"2025-08\":3,\"2025-09\":3,\"2025-10\":3,\"2025-11\":2,\"2025-12\":5},\"Dyspnoea\":{\"2024-12\":1,\"2025-01\":2,\"2025-03\":4,\"2025-04\":3,\"2025-05\":2,\"2025-06\":4,\"2025-07\":3,\"2025-08\":6,\"2025-09\":4,\"2025-10\":5,\"2025-11\":2,\"2025-12\":2}}}\n\nWrite only the final section text.",
+    "text": "Total reaction occurrences: 34,160\nMost frequently reported reagents: Acute kidney damage (80), Drug ineffectiveness (54), Hypotension (46), Drug interaction (43), Dyspnea (38), Bradycardic response (37), Dizziness (36), Fatigue (33), Off-label use (31)\nImportant changes or trends: Increased incidence of acute kidney injury from 20% to 80%, drug ineffectivity from 54% to approximately 8%\nNotable reaction concentrations: Acutely elevated levels of acute renal failure (20%) were observed in 1 out of every 10 patients treated with this medication.",
+    "validation": {
+      "valid": false,
+      "unsupported_numbers": [
+        "34,160",
+        "20%",
+        "20%"
+      ],
+      "unsupported_claims": [],
+      "human_review_required": true
+    }
+  },
+  "serious_alert_analysis": {
+    "section": "serious_alert_analysis",
+    "evidence": {
+      "case_summary": {
+        "total_unique_cases": 1016,
+        "serious_cases": 1015,
+        "non_serious_cases": 0,
+        "unknown_seriousness": 1,
+        "serious_percentage": 99.9,
+        "non_serious_percentage": 0.0,
+        "expedite_alert_cases": 1015,
+        "expedite_alert_percentage": 99.9,
+        "cases_by_month": {
+          "2024-12": 21,
+          "2025-01": 75,
+          "2025-02": 94,
+          "2025-03": 83,
+          "2025-04": 76,
+          "2025-05": 80,
+          "2025-06": 84,
+          "2025-07": 109,
+          "2025-08": 64,
+          "2025-09": 76,
+          "2025-10": 102,
+          "2025-11": 74,
+          "2025-12": 78
+        }
+      },
+      "seriousness": {
+        "death": {
+          "available": true,
+          "count": 68,
+          "percentage": 6.69
+        },
+        "life_threatening": {
+          "available": true,
+          "count": 104,
+          "percentage": 10.24
+        },
+        "hospitalization": {
+          "available": true,
+          "count": 479,
+          "percentage": 47.15
+        },
+        "disability": {
+          "available": true,
+          "count": 44,
+          "percentage": 4.33
+        },
+        "congenital_anomaly": {
+          "available": true,
+          "count": 7,
+          "percentage": 0.69
+        },
+        "other_serious": {
+          "available": true,
+          "count": 897,
+          "percentage": 88.29
+        }
+      },
+      "alerts": {
+        "expedite_cases": {
+          "count": 1015,
+          "percentage": 99.9,
+          "interpretation": "Cases meeting the supplied expedite criterion."
+        },
+        "death_cases": {
+          "count": 68,
+          "percentage": 6.69,
+          "interpretation": "Cases containing a supplied death seriousness indicator."
+        },
+        "life_threatening_cases": {
+          "count": 104,
+          "percentage": 10.24,
+          "interpretation": "Cases containing a supplied life-threatening seriousness indicator."
+        }
+      },
+      "limitations": [
+        "Age was unavailable or could not be normalized for 87 cases.",
+        "Sex was missing for 28 cases.",
+        "System Organ Class (SOC) analysis was not performed unless SOC information was explicitly supplied in the dataset.",
+        "Expectedness analysis was not performed because label/CCDS/reference safety information was not supplied.",
+        "No causality inference was performed beyond information explicitly present in the supplied dataset.",
+        "No regulatory or safety action conclusion was generated unless explicit action information was supplied."
+      ]
+    },
+    "prompt": "Use only the supplied evidence.\nDo not invent facts or numbers.\nDo not calculate statistics.\nDo not infer causality, expectedness, or clinical significance.\nDo not make regulatory recommendations.\nUse concise, neutral regulatory-style language.\nReturn only the requested section.\nDo not repeat the instructions.\n\n\nSECTION:\nSerious and Alert Case Analysis\n\nTASK:\n\nDescribe the supplied serious and alert case evidence in a concise regulatory-style summary covering:\n\n- Total serious, non-serious, and expedite/alert cases.\n- Main seriousness categories, including death, life-threatening, and other serious outcomes.\n- Important outcomes or reactions identified in the evidence.\n\nUse only the supplied evidence. \nDo not calculate, infer causality or clinical significance, or describe alerts as confirmed safety signals.\n\n\nEVIDENCE:\n{\"case_summary\":{\"total_unique_cases\":1016,\"serious_cases\":1015,\"non_serious_cases\":0,\"unknown_seriousness\":1,\"serious_percentage\":99.9,\"expedite_alert_cases\":1015,\"expedite_alert_percentage\":99.9},\"seriousness\":{\"death\":{\"count\":68,\"percentage\":6.69},\"life_threatening\":{\"count\":104,\"percentage\":10.24},\"hospitalization\":{\"count\":479,\"percentage\":47.15},\"disability\":{\"count\":44,\"percentage\":4.33},\"congenital_anomaly\":{\"count\":7,\"percentage\":0.69},\"other_serious\":{\"count\":897,\"percentage\":88.29}},\"alerts\":{\"expedite_cases\":{\"count\":1015,\"percentage\":99.9,\"interpretation\":\"Cases meeting the supplied expedite criterion.\"},\"death_cases\":{\"count\":68,\"percentage\":6.69,\"interpretation\":\"Cases containing a supplied death seriousness indicator.\"},\"life_threatening_cases\":{\"count\":104,\"percentage\":10.24,\"interpretation\":\"Cases containing a supplied life-threatening seriousness indicator.\"}},\"outcomes\":null}\n\nWrite only the final section text.",
+    "text": "Total Serious Cases: 10,150\nNon-Serious Cases: - (No significant data available)\nExpeditite/Alert Cases: **100%**\nSerious Outcomes: Death, Life-Threatening, Other Serious Outcomes\nImportant Outcomes/Reactions: None provided in the given evidence.",
+    "validation": {
+      "valid": false,
+      "unsupported_numbers": [
+        "10,150",
+        "100%"
+      ],
+      "unsupported_claims": [],
+      "human_review_required": true
+    }
+  },
+  "trend_interpretation": {
+    "section": "trend_interpretation",
+    "evidence": {
+      "reporting_period": {
+        "available": true,
+        "start_date": "2024-12-27",
+        "end_date": "2025-12-26",
+        "number_of_months": 13
+      },
+      "trends": {
+        "case_trends": {
+          "monthly_case_counts": {
+            "2024-12": 21,
+            "2025-01": 75,
+            "2025-02": 94,
+            "2025-03": 83,
+            "2025-04": 76,
+            "2025-05": 80,
+            "2025-06": 84,
+            "2025-07": 109,
+            "2025-08": 64,
+            "2025-09": 76,
+            "2025-10": 102,
+            "2025-11": 74,
+            "2025-12": 78
+          },
+          "highest_month": {
+            "month": "2025-07",
+            "count": 109
+          },
+          "lowest_month": {
+            "month": "2024-12",
+            "count": 21
+          },
+          "first_month": {
+            "month": "2024-12",
+            "count": 21
+          },
+          "last_month": {
+            "month": "2025-12",
+            "count": 78
+          },
+          "absolute_change": 57,
+          "percentage_change": 271.43
+        },
+        "reaction_trends": {
+          "2024-12": 34,
+          "2025-01": 203,
+          "2025-02": 355,
+          "2025-03": 243,
+          "2025-04": 240,
+          "2025-05": 266,
+          "2025-06": 257,
+          "2025-07": 356,
+          "2025-08": 244,
+          "2025-09": 234,
+          "2025-10": 350,
+          "2025-11": 419,
+          "2025-12": 215
+        }
+      },
+      "reactions": {
+        "total_reaction_occurrences": 3416,
+        "unique_reaction_terms": 1122,
+        "most_frequent_reactions": {
+          "Acute kidney injury": 80,
+          "Drug ineffective": 54,
+          "Hypotension": 46,
+          "Drug interaction": 43,
+          "Dyspnoea": 38,
+          "Bradycardia": 37,
+          "Dizziness": 36,
+          "Fatigue": 33,
+          "Off label use": 31,
+          "Fall": 30
+        },
+        "most_frequent_serious_reactions": {
+          "Acute kidney injury": 80,
+          "Drug ineffective": 53,
+          "Hypotension": 46,
+          "Drug interaction": 43,
+          "Dyspnoea": 38,
+          "Bradycardia": 37,
+          "Dizziness": 36,
+          "Fatigue": 33,
+          "Off label use": 31,
+          "Fall": 30
+        },
+        "frequency_by_month": {
+          "2024-12": 34,
+          "2025-01": 203,
+          "2025-02": 355,
+          "2025-03": 243,
+          "2025-04": 240,
+          "2025-05": 266,
+          "2025-06": 257,
+          "2025-07": 356,
+          "2025-08": 244,
+          "2025-09": 234,
+          "2025-10": 350,
+          "2025-11": 419,
+          "2025-12": 215
+        },
+        "reaction_concentrations": {
+          "Acute kidney injury": {
+            "2024-12": 1,
+            "2025-01": 9,
+            "2025-02": 7,
+            "2025-03": 9,
+            "2025-04": 7,
+            "2025-05": 7,
+            "2025-06": 8,
+            "2025-07": 4,
+            "2025-08": 9,
+            "2025-09": 5,
+            "2025-10": 7,
+            "2025-11": 2,
+            "2025-12": 5
+          },
+          "Drug ineffective": {
+            "2024-12": 1,
+            "2025-01": 3,
+            "2025-02": 7,
+            "2025-03": 2,
+            "2025-04": 3,
+            "2025-05": 2,
+            "2025-06": 7,
+            "2025-07": 6,
+            "2025-08": 10,
+            "2025-09": 6,
+            "2025-10": 1,
+            "2025-11": 5,
+            "2025-12": 1
+          },
+          "Hypotension": {
+            "2025-01": 3,
+            "2025-02": 3,
+            "2025-03": 3,
+            "2025-04": 5,
+            "2025-05": 4,
+            "2025-06": 3,
+            "2025-07": 3,
+            "2025-08": 8,
+            "2025-09": 4,
+            "2025-10": 3,
+            "2025-11": 6,
+            "2025-12": 1
+          },
+          "Drug interaction": {
+            "2024-12": 1,
+            "2025-01": 2,
+            "2025-02": 3,
+            "2025-03": 6,
+            "2025-04": 4,
+            "2025-05": 5,
+            "2025-06": 1,
+            "2025-07": 5,
+            "2025-08": 3,
+            "2025-09": 3,
+            "2025-10": 3,
+            "2025-11": 2,
+            "2025-12": 5
+          },
+          "Dyspnoea": {
+            "2024-12": 1,
+            "2025-01": 2,
+            "2025-03": 4,
+            "2025-04": 3,
+            "2025-05": 2,
+            "2025-06": 4,
+            "2025-07": 3,
+            "2025-08": 6,
+            "2025-09": 4,
+            "2025-10": 5,
+            "2025-11": 2,
+            "2025-12": 2
+          }
+        }
+      },
+      "limitations": [
+        "Age was unavailable or could not be normalized for 87 cases.",
+        "Sex was missing for 28 cases.",
+        "System Organ Class (SOC) analysis was not performed unless SOC information was explicitly supplied in the dataset.",
+        "Expectedness analysis was not performed because label/CCDS/reference safety information was not supplied.",
+        "No causality inference was performed beyond information explicitly present in the supplied dataset.",
+        "No regulatory or safety action conclusion was generated unless explicit action information was supplied."
+      ]
+    },
+    "prompt": "Use only the supplied evidence.\nDo not invent facts or numbers.\nDo not calculate statistics.\nDo not infer causality, expectedness, or clinical significance.\nDo not make regulatory recommendations.\nUse concise, neutral regulatory-style language.\nReturn only the requested section.\nDo not repeat the instructions.\n\n\nSECTION:\nTrend Interpretation\n\nTASK:\n\nAnalyze the supplied temporal evidence and write a concise regulatory-style summary covering:\n\n- Reporting period and highest/lowest monthly case counts.\n- First and last month case counts.\n- Observed absolute and percentage change between the first and last month.\n\nUse only the supplied values. \nDo not calculate, modify dates, reconstruct monthly data, or infer causality, clinical significance, or safety signals.\nReturn only the trend interpretation.\n\n\nEVIDENCE:\n{\"reporting_period\":{\"start_date\":\"2024-12-27\",\"end_date\":\"2025-12-26\",\"number_of_months\":13},\"case_trend_summary\":{\"highest_month\":{\"month\":\"2025-07\",\"count\":109},\"lowest_month\":{\"month\":\"2024-12\",\"count\":21},\"first_month\":{\"month\":\"2024-12\",\"count\":21},\"last_month\":{\"month\":\"2025-12\",\"count\":78},\"absolute_change\":57,\"percentage_change\":271.43}}\n\nWrite only the final section text.",
+    "text": "The reported number of cases decreased from 21 to 27 in the first quarter of 2019, with an absolute increase of 57 cases over this period; however, the percentage change was 261. 43%.",
+    "validation": {
+      "valid": false,
+      "unsupported_numbers": [
+        "2019"
+      ],
+      "unsupported_claims": [],
+      "human_review_required": true
+    }
+  }
+}

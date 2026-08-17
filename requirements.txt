@@ -1,0 +1,13 @@
+# Core data processing
+pandas>=2.2,<3.0
+numpy>=1.26,<3.0
+openpyxl>=3.1,<4.0
+
+# Hugging Face / Qwen2.5-0.5B-Instruct
+transformers>=4.50,<5.0
+torch>=2.6,<3.0
+sentencepiece>=0.2,<1.0
+accelerate>=1.0,<2.0
+
+# Progress / utility
+tqdm>=4.66,<5.0

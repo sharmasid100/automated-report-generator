@@ -1,0 +1,335 @@
+{
+  "metadata": {
+    "analysis_type": "Deterministic ICSR safety analysis",
+    "target_product": "Bisoprolol",
+    "source": "Bisoprolol ICSR dataset",
+    "analysis_principle": "Python-calculated facts are the source of truth."
+  },
+  "reporting_period": {
+    "available": true,
+    "start_date": "2024-12-27",
+    "end_date": "2025-12-26",
+    "number_of_months": 13
+  },
+  "case_summary": {
+    "total_unique_cases": 1016,
+    "serious_cases": 1015,
+    "non_serious_cases": 0,
+    "unknown_seriousness": 1,
+    "serious_percentage": 99.9,
+    "non_serious_percentage": 0.0,
+    "expedite_alert_cases": 1015,
+    "expedite_alert_percentage": 99.9,
+    "cases_by_month": {
+      "2024-12": 21,
+      "2025-01": 75,
+      "2025-02": 94,
+      "2025-03": 83,
+      "2025-04": 76,
+      "2025-05": 80,
+      "2025-06": 84,
+      "2025-07": 109,
+      "2025-08": 64,
+      "2025-09": 76,
+      "2025-10": 102,
+      "2025-11": 74,
+      "2025-12": 78
+    }
+  },
+  "seriousness": {
+    "death": {
+      "available": true,
+      "count": 68,
+      "percentage": 6.69
+    },
+    "life_threatening": {
+      "available": true,
+      "count": 104,
+      "percentage": 10.24
+    },
+    "hospitalization": {
+      "available": true,
+      "count": 479,
+      "percentage": 47.15
+    },
+    "disability": {
+      "available": true,
+      "count": 44,
+      "percentage": 4.33
+    },
+    "congenital_anomaly": {
+      "available": true,
+      "count": 7,
+      "percentage": 0.69
+    },
+    "other_serious": {
+      "available": true,
+      "count": 897,
+      "percentage": 88.29
+    }
+  },
+  "demographics": {
+    "age": {
+      "available_cases": 929,
+      "missing_cases": 87,
+      "minimum_years": 0.08,
+      "maximum_years": 104.0,
+      "mean_years": 70.08,
+      "median_years": 73.0
+    },
+    "age_group_distribution": {
+      "elderly": 667,
+      "adult": 247,
+      "unknown": 87,
+      "adolescent": 6,
+      "infant": 5,
+      "child": 4
+    },
+    "sex_distribution": {
+      "female": 499,
+      "male": 489,
+      "unknown": 28
+    },
+    "primary_source_country": {
+      "eu": 339,
+      "united kingdom": 281,
+      "france": 185,
+      "canada": 56,
+      "italy": 50,
+      "germany": 32,
+      "spain": 24,
+      "poland": 18,
+      "portugal": 8,
+      "united states": 4
+    },
+    "occurrence_country": {
+      "eu": 336,
+      "united kingdom": 278,
+      "france": 185,
+      "canada": 55,
+      "italy": 50,
+      "germany": 32,
+      "spain": 24,
+      "poland": 18,
+      "portugal": 8,
+      "unknown": 7
+    }
+  },
+  "reactions": {
+    "total_reaction_occurrences": 3416,
+    "unique_reaction_terms": 1122,
+    "most_frequent_reactions": {
+      "Acute kidney injury": 80,
+      "Drug ineffective": 54,
+      "Hypotension": 46,
+      "Drug interaction": 43,
+      "Dyspnoea": 38,
+      "Bradycardia": 37,
+      "Dizziness": 36,
+      "Fatigue": 33,
+      "Off label use": 31,
+      "Fall": 30
+    },
+    "most_frequent_serious_reactions": {
+      "Acute kidney injury": 80,
+      "Drug ineffective": 53,
+      "Hypotension": 46,
+      "Drug interaction": 43,
+      "Dyspnoea": 38,
+      "Bradycardia": 37,
+      "Dizziness": 36,
+      "Fatigue": 33,
+      "Off label use": 31,
+      "Fall": 30
+    },
+    "frequency_by_month": {
+      "2024-12": 34,
+      "2025-01": 203,
+      "2025-02": 355,
+      "2025-03": 243,
+      "2025-04": 240,
+      "2025-05": 266,
+      "2025-06": 257,
+      "2025-07": 356,
+      "2025-08": 244,
+      "2025-09": 234,
+      "2025-10": 350,
+      "2025-11": 419,
+      "2025-12": 215
+    },
+    "reaction_concentrations": {
+      "Acute kidney injury": {
+        "2024-12": 1,
+        "2025-01": 9,
+        "2025-02": 7,
+        "2025-03": 9,
+        "2025-04": 7,
+        "2025-05": 7,
+        "2025-06": 8,
+        "2025-07": 4,
+        "2025-08": 9,
+        "2025-09": 5,
+        "2025-10": 7,
+        "2025-11": 2,
+        "2025-12": 5
+      },
+      "Drug ineffective": {
+        "2024-12": 1,
+        "2025-01": 3,
+        "2025-02": 7,
+        "2025-03": 2,
+        "2025-04": 3,
+        "2025-05": 2,
+        "2025-06": 7,
+        "2025-07": 6,
+        "2025-08": 10,
+        "2025-09": 6,
+        "2025-10": 1,
+        "2025-11": 5,
+        "2025-12": 1
+      },
+      "Hypotension": {
+        "2025-01": 3,
+        "2025-02": 3,
+        "2025-03": 3,
+        "2025-04": 5,
+        "2025-05": 4,
+        "2025-06": 3,
+        "2025-07": 3,
+        "2025-08": 8,
+        "2025-09": 4,
+        "2025-10": 3,
+        "2025-11": 6,
+        "2025-12": 1
+      },
+      "Drug interaction": {
+        "2024-12": 1,
+        "2025-01": 2,
+        "2025-02": 3,
+        "2025-03": 6,
+        "2025-04": 4,
+        "2025-05": 5,
+        "2025-06": 1,
+        "2025-07": 5,
+        "2025-08": 3,
+        "2025-09": 3,
+        "2025-10": 3,
+        "2025-11": 2,
+        "2025-12": 5
+      },
+      "Dyspnoea": {
+        "2024-12": 1,
+        "2025-01": 2,
+        "2025-03": 4,
+        "2025-04": 3,
+        "2025-05": 2,
+        "2025-06": 4,
+        "2025-07": 3,
+        "2025-08": 6,
+        "2025-09": 4,
+        "2025-10": 5,
+        "2025-11": 2,
+        "2025-12": 2
+      }
+    }
+  },
+  "outcomes": {
+    "available": true,
+    "source": "seriousnessdeath",
+    "outcome_distribution": {
+      "fatal_or_death_reported": 68,
+      "other_outcomes": "Not available in supplied preprocessed data."
+    },
+    "limitation": "Detailed patient outcome categories were not available in the preprocessed dataset."
+  },
+  "trends": {
+    "case_trends": {
+      "monthly_case_counts": {
+        "2024-12": 21,
+        "2025-01": 75,
+        "2025-02": 94,
+        "2025-03": 83,
+        "2025-04": 76,
+        "2025-05": 80,
+        "2025-06": 84,
+        "2025-07": 109,
+        "2025-08": 64,
+        "2025-09": 76,
+        "2025-10": 102,
+        "2025-11": 74,
+        "2025-12": 78
+      },
+      "highest_month": {
+        "month": "2025-07",
+        "count": 109
+      },
+      "lowest_month": {
+        "month": "2024-12",
+        "count": 21
+      },
+      "first_month": {
+        "month": "2024-12",
+        "count": 21
+      },
+      "last_month": {
+        "month": "2025-12",
+        "count": 78
+      },
+      "absolute_change": 57,
+      "percentage_change": 271.43
+    },
+    "reaction_trends": {
+      "2024-12": 34,
+      "2025-01": 203,
+      "2025-02": 355,
+      "2025-03": 243,
+      "2025-04": 240,
+      "2025-05": 266,
+      "2025-06": 257,
+      "2025-07": 356,
+      "2025-08": 244,
+      "2025-09": 234,
+      "2025-10": 350,
+      "2025-11": 419,
+      "2025-12": 215
+    }
+  },
+  "alerts": {
+    "expedite_cases": {
+      "count": 1015,
+      "percentage": 99.9,
+      "interpretation": "Cases meeting the supplied expedite criterion."
+    },
+    "death_cases": {
+      "count": 68,
+      "percentage": 6.69,
+      "interpretation": "Cases containing a supplied death seriousness indicator."
+    },
+    "life_threatening_cases": {
+      "count": 104,
+      "percentage": 10.24,
+      "interpretation": "Cases containing a supplied life-threatening seriousness indicator."
+    }
+  },
+  "data_quality": {
+    "cases": 1016,
+    "reaction_records": 3416,
+    "drug_records": 1076,
+    "missingness_notes": [
+      "Age was unavailable or could not be normalized for 87 cases.",
+      "Sex was missing for 28 cases.",
+      "System Organ Class (SOC) analysis was not performed unless SOC information was explicitly supplied in the dataset.",
+      "Expectedness analysis was not performed because label/CCDS/reference safety information was not supplied.",
+      "No causality inference was performed beyond information explicitly present in the supplied dataset.",
+      "No regulatory or safety action conclusion was generated unless explicit action information was supplied."
+    ]
+  },
+  "limitations": [
+    "Age was unavailable or could not be normalized for 87 cases.",
+    "Sex was missing for 28 cases.",
+    "System Organ Class (SOC) analysis was not performed unless SOC information was explicitly supplied in the dataset.",
+    "Expectedness analysis was not performed because label/CCDS/reference safety information was not supplied.",
+    "No causality inference was performed beyond information explicitly present in the supplied dataset.",
+    "No regulatory or safety action conclusion was generated unless explicit action information was supplied."
+  ]
+}
