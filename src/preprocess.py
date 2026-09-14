@@ -1,214 +1,109 @@
-import pandas as pd
-import numpy as np
+"""ICSR preprocessing for the PADER-style safety reporting pipeline."""
+
+from __future__ import annotations
+
 import re
+import sys
 from pathlib import Path
 
+import numpy as np
+import pandas as pd
 
-# ============================================================
-# CONFIGURATION
-# ============================================================
+SRC_DIR = Path(__file__).resolve().parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
-INPUT_FILE = "data/Bisoprolol_icsr_sample_1068rows.xlsx"
-OUTPUT_DIR = Path("processed_data")
+from paths import (
+    CASES_FILE,
+    DRUGS_FILE,
+    FILTER_TO_TARGET_DRUG,
+    INPUT_FILE,
+    PROCESSED_DATA_DIR,
+    REACTIONS_FILE,
+    TARGET_DRUG_PATTERN,
+)
 
-# Recommended for a Bisoprolol PADER
-FILTER_TO_TARGET_DRUG = True
-
-TARGET_DRUG_PATTERN = r"\bBISOPROLOL(?:\s+FUMARATE)?\b"
-
-
-# ============================================================
-# HELPER FUNCTIONS
-# ============================================================
 
 def clean_text(value):
-    """Normalize text values."""
-
     if pd.isna(value):
         return None
-
     value = str(value).strip()
-
-    if value == "":
-        return None
-
-    return value
+    return None if value == "" else value
 
 
 def split_values(value):
-    """
-    Split comma-separated ICSR values.
-
-    Example:
-        'Headache,Dizziness,Nausea'
-    becomes:
-        ['Headache', 'Dizziness', 'Nausea']
-    """
-
     if pd.isna(value):
         return []
-
     value = str(value).strip()
-
     if not value:
         return []
-
     return [item.strip() for item in value.split(",")]
 
 
 def get_item(values, index):
-    """
-    Safely retrieve an item from a list.
-
-    Some ICSR fields may have missing values or
-    different list lengths.
-    """
-
     if index < len(values):
         return values[index]
-
     return None
 
 
 def contains_bisoprolol(value):
-    """Check whether a drug field contains Bisoprolol."""
-
     if pd.isna(value):
         return False
-
-    return bool(
-        re.search(
-            TARGET_DRUG_PATTERN,
-            str(value).upper()
-        )
-    )
+    return bool(re.search(TARGET_DRUG_PATTERN, str(value).upper()))
 
 
 def parse_date(value):
-    """
-    Parse ICSR dates safely.
-
-    Handles:
-        YYYYMMDD
-        YYYY-MM-DD
-        datetime
-    """
-
     if pd.isna(value):
         return pd.NaT
-
     value = str(value).strip()
-
     if not value:
         return pd.NaT
-
-    # YYYYMMDD
     if re.fullmatch(r"\d{8}", value):
-        return pd.to_datetime(
-            value,
-            format="%Y%m%d",
-            errors="coerce"
-        )
+        return pd.to_datetime(value, format="%Y%m%d", errors="coerce")
+    return pd.to_datetime(value, errors="coerce")
 
-    return pd.to_datetime(
-        value,
-        errors="coerce"
-    )
+
+def derive_age_group(age):
+    if pd.isna(age):
+        return "unknown"
+    if age < 1:
+        return "infant"
+    if age < 12:
+        return "child"
+    if age < 18:
+        return "adolescent"
+    if age < 65:
+        return "adult"
+    return "elderly"
 
 
 def preprocess_data():
-    """
-    Execute the complete preprocessing pipeline.
-
-    The function:
-        1. Loads the ICSR Excel dataset.
-        2. Normalizes column names.
-        3. Performs basic cleaning.
-        4. Validates required columns.
-        5. Normalizes case identifiers.
-        6. Keeps the latest version of each case.
-        7. Identifies and filters Bisoprolol cases.
-        8. Creates the case-level dataset.
-        9. Normalizes dates, age, and categorical fields.
-        10. Creates the reaction-level dataset.
-        11. Creates the Bisoprolol drug-level dataset.
-        12. Removes duplicates.
-        13. Saves processed CSV files.
-        14. Prints a validation summary.
-
-    Returns
-    -------
-    dict
-        Dictionary containing the processed DataFrames and
-        paths to the generated files.
-    """
-
     print("\n" + "=" * 60)
     print("STARTING PREPROCESSING")
     print("=" * 60)
 
-    # ============================================================
-    # 1. LOAD DATA
-    # ============================================================
-
     print("\nLoading dataset...")
+    if not INPUT_FILE.exists():
+        raise FileNotFoundError(
+            f"ICSR dataset not found: {INPUT_FILE}. "
+            "Place the Excel file in data/ or set ICSR_INPUT_FILE."
+        )
 
     df = pd.read_excel(INPUT_FILE)
-
     print(f"Raw rows: {len(df)}")
     print(f"Raw columns: {len(df.columns)}")
 
-    # ============================================================
-    # 2. NORMALIZE COLUMN NAMES
-    # ============================================================
-
-    df.columns = (
-        df.columns
-        .str.strip()
-        .str.lower()
-    )
-
-    # Prevent unexpected duplicate column names from causing
-    # DataFrame/Series ambiguity later in the pipeline.
+    df.columns = df.columns.str.strip().str.lower()
     if df.columns.duplicated().any():
-
-        duplicated_columns = (
-            df.columns[df.columns.duplicated()]
-            .tolist()
-        )
-
+        duplicated_columns = df.columns[df.columns.duplicated()].tolist()
         raise ValueError(
-            "Duplicate column names detected after normalization: "
-            f"{duplicated_columns}"
+            f"Duplicate column names detected after normalization: {duplicated_columns}"
         )
 
-    # ============================================================
-    # 3. BASIC CLEANING
-    # ============================================================
-
-    # Convert empty strings to NaN
-    df = df.replace(
-        r"^\s*$",
-        np.nan,
-        regex=True
-    )
-
-    # Strip whitespace from object columns
-    object_columns = df.select_dtypes(
-        include="object"
-    ).columns
-
+    df = df.replace(r"^\s*$", np.nan, regex=True)
+    object_columns = df.select_dtypes(include="object").columns
     for column in object_columns:
-
-        df[column] = (
-            df[column]
-            .astype("string")
-            .str.strip()
-        )
-
-    # ============================================================
-    # 4. VALIDATE REQUIRED COLUMNS
-    # ============================================================
+        df[column] = df[column].astype("string").str.strip()
 
     required_columns = [
         "safetyreportid",
@@ -233,129 +128,38 @@ def preprocess_data():
         "patient_drug_medicinalproduct",
         "patient_drug_activesubstance_activesubstancename",
     ]
-
-    missing_columns = [
-        column
-        for column in required_columns
-        if column not in df.columns
-    ]
-
+    missing_columns = [column for column in required_columns if column not in df.columns]
     if missing_columns:
+        raise ValueError("Required columns are missing:\n" + "\n".join(missing_columns))
 
-        raise ValueError(
-            "Required columns are missing:\n"
-            + "\n".join(missing_columns)
-        )
-
-    # ============================================================
-    # 5. NORMALIZE CASE IDENTIFIERS
-    # ============================================================
-
-    df["safetyreportid"] = (
-        pd.to_numeric(
-            df["safetyreportid"],
-            errors="coerce"
-        )
-        .astype("Int64")
-    )
-
-    df["safetyreportversion"] = (
-        pd.to_numeric(
-            df["safetyreportversion"],
-            errors="coerce"
-        )
-        .fillna(0)
-    )
-
-    # ============================================================
-    # 6. KEEP LATEST VERSION OF EACH CASE
-    # ============================================================
+    df["safetyreportid"] = pd.to_numeric(df["safetyreportid"], errors="coerce").astype("Int64")
+    df["safetyreportversion"] = pd.to_numeric(df["safetyreportversion"], errors="coerce").fillna(0)
 
     print("\nSelecting latest version of each case...")
+    df = df.sort_values(["safetyreportid", "safetyreportversion"])
+    latest_cases = df.drop_duplicates(subset=["safetyreportid"], keep="last").copy()
+    print(f"Unique cases after version handling: {len(latest_cases)}")
 
-    df = df.sort_values(
-        [
-            "safetyreportid",
-            "safetyreportversion"
-        ]
-    )
-
-    latest_cases = (
-        df
-        .drop_duplicates(
-            subset=["safetyreportid"],
-            keep="last"
-        )
-        .copy()
-    )
-
-    print(
-        f"Unique cases after version handling: "
-        f"{len(latest_cases)}"
-    )
-
-    # ============================================================
-    # 7. IDENTIFY BISOPROLOL CASES
-    # ============================================================
-
-    latest_cases["contains_bisoprolol"] = (
-        latest_cases[
-            "patient_drug_activesubstance_activesubstancename"
-        ]
-        .apply(contains_bisoprolol)
-    )
-
-    bisoprolol_case_count = (
-        latest_cases["contains_bisoprolol"].sum()
-    )
-
-    print(
-        f"Cases containing Bisoprolol: "
-        f"{bisoprolol_case_count}"
-    )
-
-    print(
-        f"Cases without Bisoprolol: "
-        f"{len(latest_cases) - bisoprolol_case_count}"
-    )
-
-    # ============================================================
-    # 8. FILTER TO TARGET DRUG
-    # ============================================================
+    latest_cases["contains_bisoprolol"] = latest_cases[
+        "patient_drug_activesubstance_activesubstancename"
+    ].apply(contains_bisoprolol)
+    bisoprolol_case_count = int(latest_cases["contains_bisoprolol"].sum())
+    print(f"Cases containing Bisoprolol: {bisoprolol_case_count}")
+    print(f"Cases without Bisoprolol: {len(latest_cases) - bisoprolol_case_count}")
 
     if FILTER_TO_TARGET_DRUG:
+        latest_cases = latest_cases[latest_cases["contains_bisoprolol"]].copy()
+        print(f"\nFiltering to Bisoprolol cases: {len(latest_cases)}")
 
-        latest_cases = latest_cases[
-            latest_cases["contains_bisoprolol"]
-        ].copy()
-
-        print(
-            f"\nFiltering to Bisoprolol cases: "
-            f"{len(latest_cases)}"
-        )
-
-    # Create a set for fast lookup
-    valid_case_ids = set(
-        latest_cases["safetyreportid"]
-    )
-
-    # ============================================================
-    # 9. CREATE CASE-LEVEL DATASET
-    # ============================================================
+    valid_case_ids = set(latest_cases["safetyreportid"])
 
     case_columns = [
         "safetyreportid",
         "safetyreportversion",
-
-        # Location
         "primarysourcecountry",
         "occurcountry",
-
-        # Report information
         "reporttype",
         "report_date",
-
-        # Seriousness
         "serious",
         "seriousnessdeath",
         "seriousnesslifethreatening",
@@ -363,131 +167,43 @@ def preprocess_data():
         "seriousnessdisabling",
         "seriousnesscongenitalanomali",
         "seriousnessother",
-
-        # Expedite
         "fulfillexpeditecriteria",
-
-        # Demographics
         "patient_patientonsetage",
         "patient_patientonsetageunit",
         "patient_patientsex",
         "patient_patientweight",
-
-        # Reporter
         "primarysource_qualification",
-
-        # Case narrative
         "patient_summary_narrativeincludeclinical",
     ]
-
-    case_columns = [
-        column
-        for column in case_columns
-        if column in latest_cases.columns
-    ]
-
-    cases = latest_cases[
-        case_columns
-    ].copy()
-
-    # ============================================================
-    # 10. NORMALIZE CASE DATA
-    # ============================================================
+    case_columns = [column for column in case_columns if column in latest_cases.columns]
+    cases = latest_cases[case_columns].copy()
 
     if "report_date" in cases.columns:
+        cases["report_date"] = cases["report_date"].apply(parse_date)
 
-        cases["report_date"] = (
-            cases["report_date"]
-            .apply(parse_date)
-        )
-
-    # Age normalization
     if "patient_patientonsetage" in cases.columns:
-
-        cases["age"] = pd.to_numeric(
-            cases["patient_patientonsetage"],
-            errors="coerce"
-        )
-
+        cases["age"] = pd.to_numeric(cases["patient_patientonsetage"], errors="coerce")
     else:
-
         cases["age"] = np.nan
 
     if "patient_patientonsetageunit" in cases.columns:
-
         cases["age_unit"] = (
-            cases["patient_patientonsetageunit"]
-            .astype("string")
-            .str.lower()
-            .str.strip()
+            cases["patient_patientonsetageunit"].astype("string").str.lower().str.strip()
         )
-
     else:
+        cases["age_unit"] = pd.Series(pd.NA, index=cases.index, dtype="string")
 
-        cases["age_unit"] = pd.Series(
-            pd.NA,
-            index=cases.index,
-            dtype="string"
-        )
-
-    # Create normalized age in years
     cases["age_years"] = np.nan
-
-    cases.loc[
-        cases["age_unit"].eq("year"),
-        "age_years"
-    ] = cases.loc[
-        cases["age_unit"].eq("year"),
-        "age"
+    cases.loc[cases["age_unit"].eq("year"), "age_years"] = cases.loc[
+        cases["age_unit"].eq("year"), "age"
     ]
-
-    cases.loc[
-        cases["age_unit"].eq("month"),
-        "age_years"
-    ] = cases.loc[
-        cases["age_unit"].eq("month"),
-        "age"
-    ] / 12
-
-    cases.loc[
-        cases["age_unit"].eq("day"),
-        "age_years"
-    ] = cases.loc[
-        cases["age_unit"].eq("day"),
-        "age"
-    ] / 365.25
-
-    # ============================================================
-    # 11. DERIVE AGE GROUPS
-    # ============================================================
-
-    def derive_age_group(age):
-
-        if pd.isna(age):
-            return "unknown"
-
-        if age < 1:
-            return "infant"
-
-        if age < 12:
-            return "child"
-
-        if age < 18:
-            return "adolescent"
-
-        if age < 65:
-            return "adult"
-
-        return "elderly"
-
-    cases["age_group"] = (
-        cases["age_years"]
-        .apply(derive_age_group)
+    cases.loc[cases["age_unit"].eq("month"), "age_years"] = (
+        cases.loc[cases["age_unit"].eq("month"), "age"] / 12
     )
-
-    # ============================================================
-    # 12. NORMALIZE CATEGORICAL VALUES
-    # ============================================================
+    cases.loc[cases["age_unit"].eq("day"), "age_years"] = (
+        cases.loc[cases["age_unit"].eq("day"), "age"] / 365.25
+    )
+    cases["age_group"] = cases["age_years"].apply(derive_age_group)
 
     categorical_columns = [
         "primarysourcecountry",
@@ -504,401 +220,133 @@ def preprocess_data():
         "patient_patientsex",
         "primarysource_qualification",
     ]
-
     for column in categorical_columns:
-
         if column in cases.columns:
-
-            cases[column] = (
-                cases[column]
-                .astype("string")
-                .str.lower()
-                .str.strip()
-            )
-
-    # ============================================================
-    # 13. CREATE REACTION-LEVEL DATASET
-    # ============================================================
+            cases[column] = cases[column].astype("string").str.lower().str.strip()
 
     reaction_rows = []
-
     for _, row in latest_cases.iterrows():
-
         case_id = row["safetyreportid"]
-
         if case_id not in valid_case_ids:
             continue
-
-        reactions_list = split_values(
-            row["patient_reaction_reactionmeddrapt"]
-        )
-
-        outcomes = split_values(
-            row["patient_reaction_reactionoutcome"]
-        )
-
+        reactions_list = split_values(row["patient_reaction_reactionmeddrapt"])
+        outcomes = split_values(row["patient_reaction_reactionoutcome"])
         meddra_versions = split_values(
-            row["patient_reaction_reactionmeddraversionpt"]
+            row.get("patient_reaction_reactionmeddraversionpt")
+            if "patient_reaction_reactionmeddraversionpt" in latest_cases.columns
+            else None
         )
-
         for i, reaction in enumerate(reactions_list):
-
             if not reaction:
                 continue
-
-            reaction_rows.append({
-
-                "safetyreportid":
-                    case_id,
-
-                "reaction_pt":
-                    reaction,
-
-                "reaction_outcome":
-                    get_item(
-                        outcomes,
-                        i
-                    ),
-
-                "meddra_version":
-                    get_item(
-                        meddra_versions,
-                        i
-                    ),
-
-                # Case-level seriousness
-                "case_serious":
-                    row["serious"],
-
-                "case_death":
-                    row["seriousnessdeath"],
-
-                "case_life_threatening":
-                    row["seriousnesslifethreatening"],
-
-                "case_hospitalization":
-                    row["seriousnesshospitalization"],
-
-                "case_disabling":
-                    row["seriousnessdisabling"],
-
-                "case_congenital_anomaly":
-                    row["seriousnesscongenitalanomali"],
-
-                "case_other_serious":
-                    row["seriousnessother"],
-            })
-
-    reactions = pd.DataFrame(
-        reaction_rows
-    )
-
-    # ============================================================
-    # 14. CREATE DRUG-LEVEL DATASET
-    # ============================================================
+            reaction_rows.append(
+                {
+                    "safetyreportid": case_id,
+                    "reaction_pt": reaction,
+                    "reaction_outcome": get_item(outcomes, i),
+                    "meddra_version": get_item(meddra_versions, i),
+                    "case_serious": row["serious"],
+                    "case_death": row["seriousnessdeath"],
+                    "case_life_threatening": row["seriousnesslifethreatening"],
+                    "case_hospitalization": row["seriousnesshospitalization"],
+                    "case_disabling": row["seriousnessdisabling"],
+                    "case_congenital_anomaly": row["seriousnesscongenitalanomali"],
+                    "case_other_serious": row["seriousnessother"],
+                }
+            )
+    reactions = pd.DataFrame(reaction_rows)
 
     drug_rows = []
+    optional_drug_fields = {
+        "patient_drug_drugdosagetext": "dose_text",
+        "patient_drug_drugstructuredosagenumb": "dose_number",
+        "patient_drug_drugstructuredosageunit": "dose_unit",
+        "patient_drug_drugadministrationroute": "route",
+        "patient_drug_drugindication": "indication",
+        "patient_drug_actiondrug": "action_taken",
+        "patient_drug_drugstartdate": "start_date",
+        "patient_drug_drugenddate": "end_date",
+    }
 
     for _, row in latest_cases.iterrows():
-
         case_id = row["safetyreportid"]
-
         if case_id not in valid_case_ids:
             continue
-
-        # Split parallel drug fields
-        characterizations = split_values(
-            row["patient_drug_drugcharacterization"]
-        )
-
-        medicinal_products = split_values(
-            row["patient_drug_medicinalproduct"]
-        )
-
-        active_substances = split_values(
-            row[
-                "patient_drug_activesubstance_activesubstancename"
-            ]
-        )
-
-        doses = split_values(
-            row["patient_drug_drugdosagetext"]
-        )
-
-        dose_numbers = split_values(
-            row["patient_drug_drugstructuredosagenumb"]
-        )
-
-        dose_units = split_values(
-            row["patient_drug_drugstructuredosageunit"]
-        )
-
-        routes = split_values(
-            row["patient_drug_drugadministrationroute"]
-        )
-
-        indications = split_values(
-            row["patient_drug_drugindication"]
-        )
-
-        actions = split_values(
-            row["patient_drug_actiondrug"]
-        )
-
-        drug_start_dates = split_values(
-            row["patient_drug_drugstartdate"]
-        )
-
-        drug_end_dates = split_values(
-            row["patient_drug_drugenddate"]
-        )
-
-        # Determine number of drug records
+        characterizations = split_values(row["patient_drug_drugcharacterization"])
+        medicinal_products = split_values(row["patient_drug_medicinalproduct"])
+        active_substances = split_values(row["patient_drug_activesubstance_activesubstancename"])
+        split_optional = {
+            dest: split_values(row[source]) if source in latest_cases.columns else []
+            for source, dest in optional_drug_fields.items()
+        }
         number_of_drugs = max(
             len(characterizations),
             len(medicinal_products),
-            len(active_substances)
+            len(active_substances),
+            0,
         )
-
         for i in range(number_of_drugs):
-
-            active_substance = get_item(
-                active_substances,
-                i
-            )
-
-            # Keep only Bisoprolol drug records
-            if not contains_bisoprolol(
-                active_substance
-            ):
+            active_substance = get_item(active_substances, i)
+            if not contains_bisoprolol(active_substance):
                 continue
-
-            drug_rows.append({
-
-                "safetyreportid":
-                    case_id,
-
-                "drug_characterization":
-                    get_item(
-                        characterizations,
-                        i
-                    ),
-
-                "medicinal_product":
-                    get_item(
-                        medicinal_products,
-                        i
-                    ),
-
-                "active_substance":
-                    active_substance,
-
-                "dose_text":
-                    get_item(
-                        doses,
-                        i
-                    ),
-
-                "dose_number":
-                    get_item(
-                        dose_numbers,
-                        i
-                    ),
-
-                "dose_unit":
-                    get_item(
-                        dose_units,
-                        i
-                    ),
-
-                "route":
-                    get_item(
-                        routes,
-                        i
-                    ),
-
-                "indication":
-                    get_item(
-                        indications,
-                        i
-                    ),
-
-                "action_taken":
-                    get_item(
-                        actions,
-                        i
-                    ),
-
-                "start_date":
-                    get_item(
-                        drug_start_dates,
-                        i
-                    ),
-
-                "end_date":
-                    get_item(
-                        drug_end_dates,
-                        i
-                    ),
-            })
-
-    target_drugs = pd.DataFrame(
-        drug_rows
-    )
-
-    # ============================================================
-    # 15. CLEAN REACTION DATA
-    # ============================================================
+            record = {
+                "safetyreportid": case_id,
+                "drug_characterization": get_item(characterizations, i),
+                "medicinal_product": get_item(medicinal_products, i),
+                "active_substance": active_substance,
+            }
+            for dest, values in split_optional.items():
+                record[dest] = get_item(values, i)
+            drug_rows.append(record)
+    target_drugs = pd.DataFrame(drug_rows)
 
     if not reactions.empty:
-
-        reactions["reaction_pt"] = (
-            reactions["reaction_pt"]
-            .astype("string")
-            .str.strip()
-        )
-
+        reactions["reaction_pt"] = reactions["reaction_pt"].astype("string").str.strip()
         reactions["reaction_outcome"] = (
-            reactions["reaction_outcome"]
-            .astype("string")
-            .str.lower()
-            .str.strip()
+            reactions["reaction_outcome"].astype("string").str.lower().str.strip()
         )
-
-    # ============================================================
-    # 16. CLEAN TARGET DRUG DATA
-    # ============================================================
-
     if not target_drugs.empty:
-
         target_drugs["active_substance"] = (
-            target_drugs["active_substance"]
-            .astype("string")
-            .str.strip()
-            .str.upper()
+            target_drugs["active_substance"].astype("string").str.strip().str.upper()
         )
+        if "drug_characterization" in target_drugs.columns:
+            target_drugs["drug_characterization"] = (
+                target_drugs["drug_characterization"].astype("string").str.lower().str.strip()
+            )
+        if "route" in target_drugs.columns:
+            target_drugs["route"] = target_drugs["route"].astype("string").str.lower().str.strip()
+        if "action_taken" in target_drugs.columns:
+            target_drugs["action_taken"] = (
+                target_drugs["action_taken"].astype("string").str.lower().str.strip()
+            )
 
-        target_drugs["drug_characterization"] = (
-            target_drugs["drug_characterization"]
-            .astype("string")
-            .str.lower()
-            .str.strip()
-        )
-
-        target_drugs["route"] = (
-            target_drugs["route"]
-            .astype("string")
-            .str.lower()
-            .str.strip()
-        )
-
-        target_drugs["action_taken"] = (
-            target_drugs["action_taken"]
-            .astype("string")
-            .str.lower()
-            .str.strip()
-        )
-
-    # ============================================================
-    # 17. REMOVE EXACT DUPLICATES
-    # ============================================================
-
-    cases = cases.drop_duplicates(
-        subset=["safetyreportid"]
-    )
-
+    cases = cases.drop_duplicates(subset=["safetyreportid"])
     reactions = reactions.drop_duplicates()
-
     target_drugs = target_drugs.drop_duplicates()
 
-    # ============================================================
-    # 18. CREATE OUTPUT DIRECTORY
-    # ============================================================
-
-    OUTPUT_DIR.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    # ============================================================
-    # 19. SAVE PROCESSED DATA
-    # ============================================================
-
-    cases_path = OUTPUT_DIR / "cases.csv"
-    reactions_path = OUTPUT_DIR / "reactions.csv"
-    target_drugs_path = OUTPUT_DIR / "target_drugs.csv"
-
-    cases.to_csv(
-        cases_path,
-        index=False
-    )
-
-    reactions.to_csv(
-        reactions_path,
-        index=False
-    )
-
-    target_drugs.to_csv(
-        target_drugs_path,
-        index=False
-    )
-
-    # ============================================================
-    # 20. VALIDATION SUMMARY
-    # ============================================================
+    PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    cases.to_csv(CASES_FILE, index=False)
+    reactions.to_csv(REACTIONS_FILE, index=False)
+    target_drugs.to_csv(DRUGS_FILE, index=False)
 
     print("\n" + "=" * 60)
     print("PREPROCESSING COMPLETE")
     print("=" * 60)
-
-    print(
-        f"Raw Excel rows       : {len(df)}"
-    )
-
-    print(
-        f"Unique cases         : "
-        f"{df['safetyreportid'].nunique()}"
-    )
-
-    print(
-        f"Cases retained       : {len(cases)}"
-    )
-
-    print(
-        f"Reaction records     : {len(reactions)}"
-    )
-
-    print(
-        f"Bisoprolol drug rows : "
-        f"{len(target_drugs)}"
-    )
-
-    print("\nMissing values in case dataset:")
-
-    print(
-        cases.isna()
-        .sum()
-        .sort_values(
-            ascending=False
-        )
-        .head(15)
-    )
-
+    print(f"Raw Excel rows      : {len(df)}")
+    print(f"Unique cases        : {df['safetyreportid'].nunique()}")
+    print(f"Cases retained      : {len(cases)}")
+    print(f"Reaction records    : {len(reactions)}")
+    print(f"Bisoprolol drug rows: {len(target_drugs)}")
     print("\nFiles created:")
-
-    print(f"  {cases_path}")
-    print(f"  {reactions_path}")
-    print(f"  {target_drugs_path}")
-
-    # ============================================================
-    # RETURN RESULTS
-    # ============================================================
+    print(f"  {CASES_FILE}")
+    print(f"  {REACTIONS_FILE}")
+    print(f"  {DRUGS_FILE}")
 
     return {
         "cases": cases,
         "reactions": reactions,
         "target_drugs": target_drugs,
-        "cases_path": cases_path,
-        "reactions_path": reactions_path,
-        "target_drugs_path": target_drugs_path,
+        "cases_path": CASES_FILE,
+        "reactions_path": REACTIONS_FILE,
+        "target_drugs_path": DRUGS_FILE,
     }

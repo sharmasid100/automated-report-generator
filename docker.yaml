@@ -1,0 +1,22 @@
+name: Docker
+# Compatibility alias. The canonical GitHub Actions workflow lives at
+# .github/workflows/docker.yaml. Keep this file in sync if you change compose
+# service names or environment variables.
+
+x-report-environment: &report-environment
+  MOCK_LLM: ${MOCK_LLM:-true}
+  ICSR_INPUT_FILE: /app/data/Bisoprolol_icsr_sample.xlsx
+  LLM_MODEL_NAME: ${LLM_MODEL_NAME:-Qwen/Qwen2.5-0.5B-Instruct}
+
+services:
+  report-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pader-automated-report-generator:local
+    environment:
+      <<: *report-environment
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./processed_data:/app/processed_data

@@ -1,0 +1,34 @@
+services:
+  report-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pader-automated-report-generator:local
+    environment:
+      MOCK_LLM: ${MOCK_LLM:-true}
+      ICSR_INPUT_FILE: /app/data/Bisoprolol_icsr_sample.xlsx
+      LLM_MODEL_NAME: ${LLM_MODEL_NAME:-Qwen/Qwen2.5-0.5B-Instruct}
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./processed_data:/app/processed_data
+    working_dir: /app
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pader-automated-report-generator:local
+    entrypoint: ["pytest"]
+    command: ["-q"]
+    environment:
+      MOCK_LLM: "true"
+      ICSR_INPUT_FILE: /app/data/Bisoprolol_icsr_sample.xlsx
+    volumes:
+      - ./tests:/app/tests
+      - ./scripts:/app/scripts
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./processed_data:/app/processed_data
+    working_dir: /app
+    profiles: ["test"]
